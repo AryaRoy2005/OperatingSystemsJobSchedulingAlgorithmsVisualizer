@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualization - CPU Scheduler</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container viz-container">
+        <div class="header">
+            <h1>Visualization</h1>
+            <a href="index.html" class="back-link">&larr; Back to Input</a>
+        </div>
+
+        <div class="grid-container">
+            <div id="algorithm-info" class="card">
+                <h2 id="algo-title">Algorithm Name</h2>
+                <p id="algo-desc">A short description of the selected algorithm will appear here.</p>
+            </div>
+
+            <div id="controls" class="card">
+                <h2>Controls</h2>
+                <div class="control-buttons">
+                    <button id="start-btn">Start</button>
+                    <button id="end-btn">End</button>
+                </div>
+                <label for="speed-slider">Speed (Time Units / Second)</label>
+                <div class="speed-control">
+                    <span>1</span>
+                    <input type="range" id="speed-slider" min="1" max="5" value="3">
+                    <span>5</span>
+                </div>
+            </div>
+
+            <div id="live-viz" class="card">
+                <div class="live-info">
+                    <p><strong>Current Time:</strong> <span id="current-time">0</span></p>
+                </div>
+                <div class="step-log">
+                    <p><strong>Log:</strong> <span id="step-log-message">Simulation has not started.</span></p>
+                </div>
+                <h3>Gantt Chart</h3>
+                <div id="gantt-chart-container">
+                    <div id="gantt-chart"></div>
+                    <div id="gantt-labels"></div>
+                </div>
+                <h3>Ready Queue</h3>
+                <div id="ready-queue">
+                    </div>
+            </div>
+
+            <div id="results" class="card">
+                <h2>Results</h2>
+                <table id="results-table">
+                    <thead>
+                        <tr>
+                            <th>Process</th>
+                            <th>AT</th>
+                            <th>BT</th>
+                            <th id="results-priority-header" class="hidden">Priority</th>
+                            <th>CT</th>
+                            <th>TAT</th>
+                            <th>WT</th>
+                            <th>RT</th>
+                        </tr>
+                    </thead>
+                    <tbody id="results-table-body">
+                        </tbody>
+                </table>
+                 <div id="averages">
+                    <p><strong>Average Turnaround Time:</strong> <span id="avg-tat">0.00</span></p>
+                    <p><strong>Average Waiting Time:</strong> <span id="avg-wt">0.00</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="visualizer.js"></script>
+</body>
+</html>
