@@ -1,10 +1,11 @@
 :root {
-    --bg-color: #212121;      /* Very dark gray background */
-    --card-bg: #2C2C2C;       /* Slightly lighter gray for cards */
-    --accent-color: #007BFF;  /* Bright, vibrant blue for accents */
-    --text-color: #E0E0E0;    /* Light gray for primary text */
-    --light-text: #FFFFFF;
-    --border-color: #424242;  /* Muted gray for borders */
+    --bg-color: #0A0A0A;        /* True black for background */
+    --card-bg: #1B1B1B;         /* Dark gray for card backgrounds */
+    --border-color: #333333;    /* Slightly lighter dark gray for borders */
+    --text-color: #F8F8F8;      /* Off-white for general text */
+    --light-text: #FFFFFF;      /* Pure white for bold text */
+    --highlight-color: #BB86FC; /* A subtle, modern purple for highlights */
+    --secondary-highlight: #03DAC6; /* A teal/cyan for secondary highlights */
 }
 
 body {
@@ -28,30 +29,37 @@ body {
 }
 
 .main-title {
-    font-size: 2.8em;
+    font-family: 'Playfair Display', serif; /* Elegant serif for main title */
+    font-size: 3em;
     font-weight: 700;
-    color: var(--accent-color);
-    padding: 10px;
+    color: var(--light-text);
     text-align: center;
+    margin-bottom: 30px;
 }
 
-h1, h2 {
-    color: var(--text-color);
+h1, h2, h3 {
+    font-family: 'Montserrat', sans-serif; /* Clean sans-serif for section headings */
+    color: var(--highlight-color);
     text-align: center;
-    font-weight: 400;
+    font-weight: 500;
 }
+h1 { font-size: 2em; }
+h2 { font-size: 1.6em; }
+h3 { font-size: 1.3em; }
 
 .viz-container h1 {
+    font-family: 'Montserrat', sans-serif;
     font-size: 2em;
+    color: var(--light-text);
 }
 
 .card {
     background-color: var(--card-bg);
     padding: 20px;
     border-radius: 8px;
-    box-shadow: none;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4); /* Subtle shadow for depth */
     border: 1px solid var(--border-color);
-    border-left: 5px solid var(--accent-color);
+    border-left: 5px solid var(--secondary-highlight); /* Highlight on the side */
 }
 
 /* --- Input Page (index.html) --- */
@@ -62,7 +70,7 @@ select, input[type="number"] {
     margin-top: 5px;
     border: 1px solid var(--border-color);
     border-radius: 4px;
-    font-family: inherit;
+    font-family: 'Inter', sans-serif;
     background-color: var(--bg-color);
     color: var(--text-color);
 }
@@ -80,9 +88,10 @@ th, td {
 }
 
 th {
-    background-color: #333;
+    background-color: #282828; /* Slightly darker header for table */
     color: var(--light-text);
     font-weight: bold;
+    font-family: 'Montserrat', sans-serif;
 }
 
 td input {
@@ -93,10 +102,11 @@ td input {
     background-color: transparent;
     font-size: 1em;
     color: var(--text-color);
+    font-family: 'Inter', sans-serif;
 }
 
 td input:focus {
-    outline: 1px solid var(--accent-color);
+    outline: 1px solid var(--highlight-color);
     border-radius: 2px;
 }
 
@@ -105,20 +115,21 @@ button, .back-link {
     width: fit-content;
     padding: 12px 25px;
     font-size: 16px;
-    font-family: inherit;
-    font-weight: bold;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
     color: var(--light-text);
-    background-color: var(--accent-color);
+    background-color: var(--highlight-color);
     border: none;
     border-radius: 5px;
     cursor: pointer;
     text-decoration: none;
     margin: 20px auto 0;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 button:hover, .back-link:hover {
-    background-color: #0056b3; /* Darker blue */
+    background-color: #9C27B0; /* Darker purple on hover */
+    transform: translateY(-2px);
 }
 
 .icon-btn {
@@ -129,6 +140,12 @@ button:hover, .back-link:hover {
     border-radius: 50%;
     line-height: 40px;
     text-align: center;
+    background-color: var(--secondary-highlight);
+    color: var(--bg-color); /* Dark text for light button */
+}
+.icon-btn:hover {
+    background-color: #00A389; /* Darker teal on hover */
+    transform: translateY(-2px);
 }
 
 .remove-btn {
@@ -140,7 +157,7 @@ button:hover, .back-link:hover {
     transition: color 0.2s ease;
 }
 .remove-btn:hover {
-    color: #E57373; /* Red on hover for clarity */
+    color: var(--accent-color); /* Highlight color on hover */
 }
 
 .hidden {
@@ -158,11 +175,27 @@ button:hover, .back-link:hover {
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    margin-bottom: 20px;
+}
+.viz-container .header h1 {
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    color: var(--light-text);
 }
 
 .back-link {
     margin: 0;
+    background-color: var(--border-color); /* Muted button for back link */
+    color: var(--text-color);
+    padding: 8px 15px;
+    border-radius: 4px;
+    font-size: 0.9em;
 }
+.back-link:hover {
+    background-color: #424242;
+    transform: translateY(-1px);
+}
+
 
 .grid-container {
     display: grid;
@@ -186,14 +219,9 @@ button:hover, .back-link:hover {
 
 .control-buttons button {
     margin: 0;
+    background-color: var(--highlight-color); /* Main accent for controls */
 }
-
-#start-btn, #end-btn { 
-    background-color: var(--accent-color);
-    color: var(--light-text); 
-    font-weight: bold;
-}
-#start-btn:hover, #end-btn:hover { background-color: #0056b3; }
+#start-btn:hover, #end-btn:hover { background-color: #9C27B0; }
 
 
 .speed-control {
@@ -201,18 +229,24 @@ button:hover, .back-link:hover {
     align-items: center;
     justify-content: center;
     gap: 10px;
+    font-family: 'Inter', sans-serif;
 }
+.speed-control label {
+    font-weight: 300;
+}
+
 
 #speed-slider {
     width: 60%;
     cursor: pointer;
+    accent-color: var(--secondary-highlight); /* Changes slider color */
 }
 
 #gantt-chart-container {
     width: 100%;
     margin-top: 10px;
     position: relative;
-    background-color: #1A1A1A;
+    background-color: #1A1A1A; /* Darker background for the chart itself */
     border: 1px solid var(--border-color);
     min-height: 50px;
 }
@@ -232,6 +266,7 @@ button:hover, .back-link:hover {
     box-sizing: border-box;
     overflow: hidden;
     white-space: nowrap;
+    font-family: 'Inter', sans-serif;
 }
 
 #gantt-labels {
@@ -239,6 +274,8 @@ button:hover, .back-link:hover {
     position: relative;
     height: 20px;
     font-size: 12px;
+    color: #9E9E9E; /* Muted label color */
+    font-family: 'Inter', sans-serif;
 }
 
 .gantt-label {
@@ -251,7 +288,7 @@ button:hover, .back-link:hover {
     margin-top: 10px;
     min-height: 40px;
     padding: 10px;
-    border: 1px dashed var(--accent-color);
+    border: 1px dashed var(--secondary-highlight);
     border-radius: 4px;
     display: flex;
     gap: 10px;
@@ -260,16 +297,19 @@ button:hover, .back-link:hover {
 }
 
 .queue-process {
-    background-color: var(--accent-color);
-    color: var(--light-text);
+    background-color: var(--secondary-highlight);
+    color: var(--bg-color);
     padding: 5px 10px;
     border-radius: 4px;
     font-weight: bold;
+    font-family: 'Inter', sans-serif;
 }
 
 #averages {
     margin-top: 20px;
     text-align: right;
     font-weight: bold;
-    color: var(--accent-color);
+    color: var(--highlight-color); /* Highlight color for averages */
+    font-family: 'Montserrat', sans-serif;
 }
+
