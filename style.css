@@ -1,15 +1,20 @@
 :root {
-    --bg-color: #0A0A0A;        /* True black for background */
-    --card-bg: #1B1B1B;         /* Dark gray for card backgrounds */
-    --border-color: #333333;    /* Slightly lighter dark gray for borders */
-    --text-color: #F8F8F8;      /* Off-white for general text */
-    --light-text: #FFFFFF;      /* Pure white for bold text */
-    --highlight-color: #BB86FC; /* A subtle, modern purple for highlights */
-    --secondary-highlight: #03DAC6; /* A teal/cyan for secondary highlights */
+    /* Google Color Palette */
+    --google-blue: #4285F4;
+    --google-red: #EA4335;
+    --google-green: #34A853;
+    --google-yellow: #FBBC05;
+
+    /* Mid-tone Theme Colors */
+    --bg-color: #F8F9FA;        /* Very light gray background */
+    --card-bg: #E8EAED;       /* Slightly darker gray for cards */
+    --text-color: #3c4043;      /* Dark gray for text */
+    --light-text: #F8F9FA;
+    --border-color: #DADCE0;    /* Muted gray for borders */
 }
 
 body {
-    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: 'Poppins', sans-serif;
     background-color: var(--bg-color);
     color: var(--text-color);
     margin: 0;
@@ -29,37 +34,29 @@ body {
 }
 
 .main-title {
-    font-family: 'Playfair Display', serif; /* Elegant serif for main title */
-    font-size: 3em;
+    font-size: 2.5em;
     font-weight: 700;
-    color: var(--light-text);
+    color: var(--google-blue);
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 h1, h2, h3 {
-    font-family: 'Montserrat', sans-serif; /* Clean sans-serif for section headings */
-    color: var(--highlight-color);
-    text-align: center;
     font-weight: 500;
+    color: var(--text-color);
+    text-align: center;
 }
-h1 { font-size: 2em; }
+.viz-container h1 {
+    font-size: 2.2em;
+}
 h2 { font-size: 1.6em; }
 h3 { font-size: 1.3em; }
-
-.viz-container h1 {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 2em;
-    color: var(--light-text);
-}
 
 .card {
     background-color: var(--card-bg);
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4); /* Subtle shadow for depth */
     border: 1px solid var(--border-color);
-    border-left: 5px solid var(--secondary-highlight); /* Highlight on the side */
 }
 
 /* --- Input Page (index.html) --- */
@@ -70,15 +67,17 @@ select, input[type="number"] {
     margin-top: 5px;
     border: 1px solid var(--border-color);
     border-radius: 4px;
-    font-family: 'Inter', sans-serif;
+    font-family: inherit;
     background-color: var(--bg-color);
     color: var(--text-color);
+    font-size: 1em;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 15px;
+    background-color: var(--bg-color);
 }
 
 th, td {
@@ -88,10 +87,9 @@ th, td {
 }
 
 th {
-    background-color: #282828; /* Slightly darker header for table */
-    color: var(--light-text);
-    font-weight: bold;
-    font-family: 'Montserrat', sans-serif;
+    background-color: #E8EAED;
+    color: var(--text-color);
+    font-weight: 500;
 }
 
 td input {
@@ -102,11 +100,10 @@ td input {
     background-color: transparent;
     font-size: 1em;
     color: var(--text-color);
-    font-family: 'Inter', sans-serif;
 }
 
 td input:focus {
-    outline: 1px solid var(--highlight-color);
+    outline: 2px solid var(--google-blue);
     border-radius: 2px;
 }
 
@@ -114,23 +111,23 @@ button, .back-link {
     display: block;
     width: fit-content;
     padding: 12px 25px;
-    font-size: 16px;
-    font-family: 'Montserrat', sans-serif;
+    font-size: 1em;
+    font-family: inherit;
     font-weight: 500;
     color: var(--light-text);
-    background-color: var(--highlight-color);
     border: none;
     border-radius: 5px;
     cursor: pointer;
     text-decoration: none;
     margin: 20px auto 0;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    transition: box-shadow 0.2s ease;
 }
 
 button:hover, .back-link:hover {
-    background-color: #9C27B0; /* Darker purple on hover */
-    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
+
+#visualize-btn { background-color: var(--google-blue); }
 
 .icon-btn {
     width: 40px;
@@ -140,33 +137,19 @@ button:hover, .back-link:hover {
     border-radius: 50%;
     line-height: 40px;
     text-align: center;
-    background-color: var(--secondary-highlight);
-    color: var(--bg-color); /* Dark text for light button */
-}
-.icon-btn:hover {
-    background-color: #00A389; /* Darker teal on hover */
-    transform: translateY(-2px);
+    background-color: var(--google-green);
 }
 
 .remove-btn {
     background: none;
     border: none;
-    color: #9E9E9E; /* Muted gray for remove icon */
+    color: var(--google-red);
     font-size: 20px;
     cursor: pointer;
-    transition: color 0.2s ease;
-}
-.remove-btn:hover {
-    color: var(--accent-color); /* Highlight color on hover */
 }
 
-.hidden {
-    display: none;
-}
-
-#rr-options {
-    margin-top: 15px;
-}
+.hidden { display: none; }
+#rr-options { margin-top: 15px; }
 
 /* --- Visualization Page (visualizer.html) --- */
 
@@ -175,27 +158,12 @@ button:hover, .back-link:hover {
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    margin-bottom: 20px;
 }
-.viz-container .header h1 {
-    margin: 0;
-    font-family: 'Montserrat', sans-serif;
-    color: var(--light-text);
-}
-
 .back-link {
     margin: 0;
-    background-color: var(--border-color); /* Muted button for back link */
+    background-color: var(--card-bg);
     color: var(--text-color);
-    padding: 8px 15px;
-    border-radius: 4px;
-    font-size: 0.9em;
 }
-.back-link:hover {
-    background-color: #424242;
-    transform: translateY(-1px);
-}
-
 
 .grid-container {
     display: grid;
@@ -216,57 +184,42 @@ button:hover, .back-link:hover {
     justify-content: center;
     margin-bottom: 15px;
 }
-
-.control-buttons button {
-    margin: 0;
-    background-color: var(--highlight-color); /* Main accent for controls */
-}
-#start-btn:hover, #end-btn:hover { background-color: #9C27B0; }
-
+.control-buttons button { margin: 0; }
+#start-btn { background-color: var(--google-green); }
+#end-btn { background-color: var(--google-blue); }
 
 .speed-control {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
-    font-family: 'Inter', sans-serif;
 }
-.speed-control label {
-    font-weight: 300;
-}
-
-
 #speed-slider {
     width: 60%;
     cursor: pointer;
-    accent-color: var(--secondary-highlight); /* Changes slider color */
+    accent-color: var(--google-blue);
 }
 
 #gantt-chart-container {
     width: 100%;
     margin-top: 10px;
     position: relative;
-    background-color: #1A1A1A; /* Darker background for the chart itself */
+    background-color: var(--bg-color);
     border: 1px solid var(--border-color);
     min-height: 50px;
 }
 
-#gantt-chart {
-    display: flex;
-    height: 50px;
-}
-
+#gantt-chart { display: flex; height: 50px; }
 .gantt-bar {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-weight: bold;
+    font-weight: 500;
     color: var(--light-text);
     height: 100%;
     box-sizing: border-box;
     overflow: hidden;
     white-space: nowrap;
-    font-family: 'Inter', sans-serif;
 }
 
 #gantt-labels {
@@ -274,10 +227,7 @@ button:hover, .back-link:hover {
     position: relative;
     height: 20px;
     font-size: 12px;
-    color: #9E9E9E; /* Muted label color */
-    font-family: 'Inter', sans-serif;
 }
-
 .gantt-label {
     position: absolute;
     bottom: -20px;
@@ -288,7 +238,7 @@ button:hover, .back-link:hover {
     margin-top: 10px;
     min-height: 40px;
     padding: 10px;
-    border: 1px dashed var(--secondary-highlight);
+    border: 2px dashed var(--google-yellow);
     border-radius: 4px;
     display: flex;
     gap: 10px;
@@ -297,19 +247,17 @@ button:hover, .back-link:hover {
 }
 
 .queue-process {
-    background-color: var(--secondary-highlight);
-    color: var(--bg-color);
+    background-color: var(--google-blue);
+    color: var(--light-text);
     padding: 5px 10px;
     border-radius: 4px;
-    font-weight: bold;
-    font-family: 'Inter', sans-serif;
+    font-weight: 500;
 }
 
 #averages {
     margin-top: 20px;
     text-align: right;
-    font-weight: bold;
-    color: var(--highlight-color); /* Highlight color for averages */
-    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    color: var(--text-color);
 }
 
