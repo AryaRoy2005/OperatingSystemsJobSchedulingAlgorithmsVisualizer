@@ -1,21 +1,15 @@
 :root {
-    /* Google Color Palette */
-    --google-blue: #4285F4;
-    --google-red: #EA4335;
-    --google-green: #34A853;
-    --google-yellow: #FBBC05;
-
-    /* Mid-tone Theme Colors */
-    --bg-color: #F8F9FA;        /* Very light gray background */
-    --card-bg: #E8EAED;       /* Slightly darker gray for cards */
-    --text-color: #3c4043;      /* Dark gray for text */
-    --light-text: #F8F9FA;
-    --border-color: #DADCE0;    /* Muted gray for borders */
+    --bg-color: #000000;        /* Pure black background */
+    --card-bg: #121212;         /* Very dark gray for cards */
+    --accent-color: #007BFF;    /* A vibrant, standard blue */
+    --text-color: #E0E0E0;      /* Light gray for primary text */
+    --light-text: #FFFFFF;      /* Pure white for bold text and buttons */
+    --border-color: #2C2C2C;    /* Muted dark gray for borders */
 }
 
 body {
     font-family: 'Poppins', sans-serif;
-    background-color: var(--google-yellow);
+    background-color: var(--bg-color);
     color: var(--text-color);
     margin: 0;
     padding: 20px;
@@ -34,21 +28,19 @@ body {
 }
 
 .main-title {
-    font-size: 2.6em;
-    font-weight: 600;
-    color: black;
+    font-size: 2.5em;
+    font-weight: 700;
+    color: var(--light-text);
     text-align: center;
     margin-bottom: 20px;
 }
 
 h1, h2, h3 {
     font-weight: 500;
-    color: var(--text-color);
+    color: var(--light-text);
     text-align: center;
 }
-.viz-container h1 {
-    font-size: 2.2em;
-}
+.viz-container h1 { font-size: 2.2em; }
 h2 { font-size: 1.6em; }
 h3 { font-size: 1.3em; }
 
@@ -77,7 +69,6 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 15px;
-    background-color: var(--bg-color);
 }
 
 th, td {
@@ -87,8 +78,8 @@ th, td {
 }
 
 th {
-    background-color: var(--google-green);
-    color: var(--text-color);
+    background-color: #1F1F1F;
+    color: var(--light-text);
     font-weight: 500;
 }
 
@@ -103,7 +94,7 @@ td input {
 }
 
 td input:focus {
-    outline: 2px solid var(--google-blue);
+    outline: 2px solid var(--accent-color);
     border-radius: 2px;
 }
 
@@ -115,19 +106,18 @@ button, .back-link {
     font-family: inherit;
     font-weight: 500;
     color: var(--light-text);
+    background-color: var(--accent-color);
     border: none;
     border-radius: 5px;
     cursor: pointer;
     text-decoration: none;
     margin: 20px auto 0;
-    transition: box-shadow 0.2s ease;
+    transition: background-color 0.2s ease;
 }
 
 button:hover, .back-link:hover {
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    background-color: #0056b3; /* Darker blue */
 }
-
-#visualize-btn { background-color: var(--google-blue); }
 
 .icon-btn {
     width: 40px;
@@ -137,15 +127,19 @@ button:hover, .back-link:hover {
     border-radius: 50%;
     line-height: 40px;
     text-align: center;
-    background-color: var(--google-green);
 }
 
 .remove-btn {
     background: none;
     border: none;
-    color: var(--google-red);
+    color: var(--accent-color);
     font-size: 20px;
     cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+}
+.remove-btn:hover {
+    opacity: 1;
 }
 
 .hidden { display: none; }
@@ -161,7 +155,7 @@ button:hover, .back-link:hover {
 }
 .back-link {
     margin: 0;
-    background-color: var(--card-bg);
+    background-color: var(--border-color);
     color: var(--text-color);
 }
 
@@ -185,8 +179,6 @@ button:hover, .back-link:hover {
     margin-bottom: 15px;
 }
 .control-buttons button { margin: 0; }
-#start-btn { background-color: var(--google-green); }
-#end-btn { background-color: var(--google-blue); }
 
 .speed-control {
     display: flex;
@@ -197,7 +189,7 @@ button:hover, .back-link:hover {
 #speed-slider {
     width: 60%;
     cursor: pointer;
-    accent-color: var(--google-blue);
+    accent-color: var(--accent-color);
 }
 
 #gantt-chart-container {
@@ -220,6 +212,7 @@ button:hover, .back-link:hover {
     box-sizing: border-box;
     overflow: hidden;
     white-space: nowrap;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
 }
 
 #gantt-labels {
@@ -238,7 +231,7 @@ button:hover, .back-link:hover {
     margin-top: 10px;
     min-height: 40px;
     padding: 10px;
-    border: 2px dashed var(--google-yellow);
+    border: 2px dashed var(--accent-color);
     border-radius: 4px;
     display: flex;
     gap: 10px;
@@ -247,7 +240,7 @@ button:hover, .back-link:hover {
 }
 
 .queue-process {
-    background-color: var(--google-blue);
+    background-color: var(--accent-color);
     color: var(--light-text);
     padding: 5px 10px;
     border-radius: 4px;
@@ -260,6 +253,5 @@ button:hover, .back-link:hover {
     font-weight: 500;
     color: var(--text-color);
 }
-
 
 
