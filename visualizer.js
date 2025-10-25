@@ -18,7 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Assign unique colors to processes for consistency
     const processColors = {};
-    const colorPalette = ['#8b0000', '#001f3f', '#2E8B57', '#4682B4', '#D2691E', '#6A5ACD', '#C71585', '#008080'];
+    // Updated color palette to Google Colors
+    const colorPalette = ['#4285F4', '#EA4335', '#FBBC05', '#34A853', '#7158E2', '#F78FB3'];
     initialProcesses.forEach((p, i) => {
         processColors[p.id] = colorPalette[i % colorPalette.length];
     });
@@ -85,7 +86,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 case 'LJF':
                 case 'PRIO-NP':
                 case 'HRRN':
-                    // These are non-preemptive. If a process is running, let it finish.
                     const running = ganttLog.length > 0 && ganttLog[ganttLog.length-1].end > localTime && ganttLog[ganttLog.length-1].id !== 'Idle';
                     if (running) {
                         localTime++;
@@ -114,19 +114,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     executingProcess = readyQueue[0];
                     break;
                 case 'RR':
-                    // Add newly arrived processes to the RR queue
                     if(localTime > rr_last_check) {
                         const newArrivals = readyQueue.filter(p => !rr_queue.includes(p.id));
                         newArrivals.sort((a,b) => a.at - b.at);
                         newArrivals.forEach(p => rr_queue.push(p.id));
                     }
                     rr_last_check = localTime;
-
                     if (rr_queue.length > 0) {
                         const currentId = rr_queue[0];
                         executingProcess = processes.find(p => p.id === currentId);
                         const lastGantt = ganttLog[ganttLog.length-1];
-                        // If current process just finished its time slice, move it to the back
                         if (lastGantt && lastGantt.id === currentId && (localTime - lastGantt.start) % timeQuantum === 0 && localTime !== lastGantt.start) {
                              rr_queue.shift();
                              rr_queue.push(currentId);
@@ -154,7 +151,6 @@ document.addEventListener('DOMContentLoaded', () => {
             localTime++;
         }
         
-        // Consolidate Gantt chart blocks
         const consolidatedGantt = [];
         if (ganttLog.length > 0) {
             consolidatedGantt.push(ganttLog[0]);
@@ -168,7 +164,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Calculate final metrics
         processes.forEach(p => {
             p.turnaround_time = p.completion_time - p.at;
             p.waiting_time = p.turnaround_time - p.bt;
@@ -180,18 +175,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Visualization Functions ---
     const initialize = () => {
-        // Reset state
         if (simulationInterval) clearInterval(simulationInterval);
         currentTime = 0;
         isRunning = false;
 
-        // Run computation
         const result = computeSchedule();
         computedGantt = result.gantt;
         finalProcessStates = result.processes;
         totalExecutionTime = result.totalTime;
 
-        // Update UI
         algoTitle.textContent = `${algorithm}${algorithm === 'RR' ? ` (TQ=${timeQuantum})` : ''}`;
         algoDesc.textContent = ALGO_DEFS[algorithm];
         startBtn.textContent = 'Start';
@@ -200,7 +192,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (algorithm.includes('PRIO')) resultsPriorityHeader.classList.remove('hidden');
 
-        // Reset display
         ganttChartEl.innerHTML = '';
         ganttLabelsEl.innerHTML = '';
         readyQueueEl.innerHTML = '';
@@ -208,14 +199,14 @@ document.addEventListener('DOMContentLoaded', () => {
         currentTimeEl.textContent = '0';
         avgTatEl.textContent = '0.00';
         avgWtEl.textContent = '0.00';
-        populateResultsTable(true); // Populate with initial '-' values
+        populateResultsTable(true);
         drawGanttAxis();
     };
 
     const drawGanttAxis = () => {
         ganttLabelsEl.innerHTML = '';
         for (let i = 0; i <= totalExecutionTime; i++) {
-            if (i % (Math.ceil(totalExecutionTime/20)) === 0 || i === totalExecutionTime) { // Avoid cluttering
+            if (i % (Math.ceil(totalExecutionTime/20)) === 0 || i === totalExecutionTime) {
                 const label = document.createElement('span');
                 label.className = 'gantt-label';
                 label.textContent = i;
@@ -233,23 +224,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         currentTimeEl.textContent = currentTime;
 
-        // Update Gantt Chart incrementally
         ganttChartEl.innerHTML = '';
-        let currentTotalWidth = 0;
         computedGantt.forEach(bar => {
             if (bar.start < currentTime) {
                 const barWidth = (Math.min(currentTime, bar.end) - bar.start);
-                currentTotalWidth += barWidth;
                 const barEl = document.createElement('div');
                 barEl.className = 'gantt-bar';
                 if (bar.id !== 'Idle') barEl.textContent = bar.id;
                 barEl.style.width = `${(barWidth / totalExecutionTime) * 100}%`;
-                barEl.style.backgroundColor = bar.id === 'Idle' ? '#ccc' : processColors[bar.id];
+                barEl.style.backgroundColor = bar.id === 'Idle' ? '#BDC1C6' : processColors[bar.id];
                 ganttChartEl.appendChild(barEl);
             }
         });
         
-        // Update Ready Queue & Log
         const currentGanttBlock = computedGantt.find(b => currentTime > b.start && currentTime <= b.end);
         const runningProcessId = currentGanttBlock && currentGanttBlock.id !== 'Idle' ? currentGanttBlock.id : null;
 
@@ -277,12 +264,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (simulationInterval) clearInterval(simulationInterval);
         isRunning = false;
         currentTime = totalExecutionTime;
-        visualizationStep(); // Run one last step to draw the full chart
-        populateResultsTable(false); // Populate with final values
+        visualizationStep();
+        populateResultsTable(false);
         finishSimulation();
     };
-
-
 
     const populateResultsTable = (initial = false) => {
         resultsBody.innerHTML = '';
@@ -313,7 +298,6 @@ document.addEventListener('DOMContentLoaded', () => {
         endBtn.disabled = true;
         logMessageEl.textContent = 'Simulation finished!';
         
-        // Calculate averages if not already done
         if(avgTatEl.textContent === '0.00') {
             const totalTAT = finalProcessStates.reduce((acc, p) => acc + p.turnaround_time, 0);
             const totalWT = finalProcessStates.reduce((acc, p) => acc + p.waiting_time, 0);
@@ -321,7 +305,6 @@ document.addEventListener('DOMContentLoaded', () => {
             avgWtEl.textContent = (totalWT / finalProcessStates.length).toFixed(2);
         }
         
-        // Ensure final table is populated
         populateResultsTable(false);
     };
 
@@ -332,13 +315,13 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         
-        if (isRunning) { // User wants to PAUSE
+        if (isRunning) {
             clearInterval(simulationInterval);
             isRunning = false;
             startBtn.textContent = 'Play';
-        } else { // User wants to PLAY or START for the first time
+        } else {
             if (startBtn.textContent === 'Start') {
-                populateResultsTable(false); // Populate table with final results on first start
+                populateResultsTable(false);
             }
             isRunning = true;
             startBtn.textContent = 'Pause';
