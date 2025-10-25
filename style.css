@@ -78,7 +78,7 @@ th, td {
 }
 
 th {
-    background-color: #1F1F1F;
+    background-color: #0e038c;
     color: var(--light-text);
     font-weight: 500;
 }
@@ -253,5 +253,6 @@ button:hover, .back-link:hover {
     font-weight: 500;
     color: var(--text-color);
 }
+
 
 
