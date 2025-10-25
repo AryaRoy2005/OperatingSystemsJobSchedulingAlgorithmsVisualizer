@@ -15,7 +15,7 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    background-color: var(--bg-color);
+    background-color: var(--google-yellow);
     color: var(--text-color);
     margin: 0;
     padding: 20px;
@@ -34,9 +34,9 @@ body {
 }
 
 .main-title {
-    font-size: 2.5em;
-    font-weight: 700;
-    color: var(--google-blue);
+    font-size: 2.6em;
+    font-weight: 600;
+    color: black;
     text-align: center;
     margin-bottom: 20px;
 }
@@ -87,7 +87,7 @@ th, td {
 }
 
 th {
-    background-color: #E8EAED;
+    background-color: var(--google-green);
     color: var(--text-color);
     font-weight: 500;
 }
@@ -225,7 +225,7 @@ button:hover, .back-link:hover {
 #gantt-labels {
     display: flex;
     position: relative;
-    height: 20px;
+    /* height: 20px; */
     font-size: 12px;
 }
 .gantt-label {
@@ -260,4 +260,6 @@ button:hover, .back-link:hover {
     font-weight: 500;
     color: var(--text-color);
 }
+
+
 
