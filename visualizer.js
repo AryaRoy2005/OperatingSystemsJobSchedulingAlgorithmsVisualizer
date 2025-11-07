@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Assign unique colors to processes for consistency
     const processColors = {};
-    const colorPalette = ['#007BFF', '#3498DB', '#5DADE2', '#85C1E9', '#0056b3', '#2c81b8'];
+    const colorPalette = ['#4285F4', '#EA4335', '#FBBC05', '#34A853', '#7158E2', '#F78FB3'];
     initialProcesses.forEach((p, i) => {
         processColors[p.id] = colorPalette[i % colorPalette.length];
     });
@@ -358,3 +358,4 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Initial Call ---
     initialize();
 });
+
