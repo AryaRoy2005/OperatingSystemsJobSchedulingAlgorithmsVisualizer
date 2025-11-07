@@ -18,8 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Assign unique colors to processes for consistency
     const processColors = {};
-    // Updated color palette to Google Colors
-    const colorPalette = ['#4285F4', '#EA4335', '#FBBC05', '#34A853', '#7158E2', '#F78FB3'];
+    const colorPalette = ['#007BFF', '#3498DB', '#5DADE2', '#85C1E9', '#0056b3', '#2c81b8'];
     initialProcesses.forEach((p, i) => {
         processColors[p.id] = colorPalette[i % colorPalette.length];
     });
@@ -68,6 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let completedCount = 0;
         let rr_queue = [];
         let rr_last_check = -1;
+        let rr_current_slice_start = 0; // Tracks start time of the current slice
 
         while (completedCount < processes.length) {
             let readyQueue = processes.filter(p => p.at <= localTime && p.remaining_bt > 0);
@@ -86,18 +86,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 case 'LJF':
                 case 'PRIO-NP':
                 case 'HRRN':
-                    const running = ganttLog.length > 0 && ganttLog[ganttLog.length-1].end > localTime && ganttLog[ganttLog.length-1].id !== 'Idle';
+                    const running = ganttLog.length > 0 && ganttLog[ganttLog.length - 1].end > localTime && ganttLog[ganttLog.length - 1].id !== 'Idle';
                     if (running) {
                         localTime++;
                         continue;
                     }
-                    if (algorithm === 'FCFS') readyQueue.sort((a,b) => a.at - b.at);
-                    if (algorithm === 'SJF') readyQueue.sort((a,b) => a.bt - b.bt || a.at - b.at);
-                    if (algorithm === 'LJF') readyQueue.sort((a,b) => b.bt - a.bt || a.at - b.at);
-                    if (algorithm === 'PRIO-NP') readyQueue.sort((a,b) => a.priority - b.priority || a.at - b.at);
+                    if (algorithm === 'FCFS') readyQueue.sort((a, b) => a.at - b.at);
+                    if (algorithm === 'SJF') readyQueue.sort((a, b) => a.bt - b.bt || a.at - b.at);
+                    if (algorithm === 'LJF') readyQueue.sort((a, b) => b.bt - a.bt || a.at - b.at);
+                    if (algorithm === 'PRIO-NP') readyQueue.sort((a, b) => a.priority - b.priority || a.at - b.at);
                     if (algorithm === 'HRRN') {
                         readyQueue.forEach(p => p.rr = ((localTime - p.at) + p.bt) / p.bt);
-                        readyQueue.sort((a,b) => b.rr - a.rr || a.at - b.at);
+                        readyQueue.sort((a, b) => b.rr - a.rr || a.at - b.at);
                     }
                     executingProcess = readyQueue[0];
                     break;
@@ -114,20 +114,31 @@ document.addEventListener('DOMContentLoaded', () => {
                     executingProcess = readyQueue[0];
                     break;
                 case 'RR':
-                    if(localTime > rr_last_check) {
+                    if (localTime > rr_last_check) {
                         const newArrivals = readyQueue.filter(p => !rr_queue.includes(p.id));
-                        newArrivals.sort((a,b) => a.at - b.at);
+                        newArrivals.sort((a, b) => a.at - b.at);
                         newArrivals.forEach(p => rr_queue.push(p.id));
                     }
                     rr_last_check = localTime;
+
                     if (rr_queue.length > 0) {
-                        const currentId = rr_queue[0];
+                        let currentId = rr_queue[0];
                         executingProcess = processes.find(p => p.id === currentId);
-                        const lastGantt = ganttLog[ganttLog.length-1];
-                        if (lastGantt && lastGantt.id === currentId && (localTime - lastGantt.start) % timeQuantum === 0 && localTime !== lastGantt.start) {
-                             rr_queue.shift();
-                             rr_queue.push(currentId);
-                             executingProcess = processes.find(p => p.id === rr_queue[0]);
+                        
+                        const lastGantt = ganttLog.length > 0 ? ganttLog[ganttLog.length - 1] : null;
+
+                        // If the process just started or is different from the last one, reset the slice timer
+                        if (!lastGantt || lastGantt.id !== currentId) {
+                            rr_current_slice_start = localTime;
+                        }
+
+                        // Check if the current process's time slice has expired
+                        if ((localTime - rr_current_slice_start) >= timeQuantum) {
+                             rr_queue.shift();       // Remove from front
+                             rr_queue.push(currentId); // Add to back
+                             currentId = rr_queue[0]; // Get the new process at the front
+                             executingProcess = processes.find(p => p.id === currentId);
+                             rr_current_slice_start = localTime; // Reset slice start time for the new turn
                         }
                     }
                     break;
@@ -143,8 +154,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (executingProcess.remaining_bt === 0) {
                     completedCount++;
                     executingProcess.completion_time = localTime + 1;
-                    if(algorithm === 'RR') {
-                        rr_queue = rr_queue.filter(id => id !== executingProcess.id);
+                    if (algorithm === 'RR') {
+                        rr_queue.shift(); // Remove the finished process from the front
+                        rr_current_slice_start = localTime + 1; // Reset timer for the next process
                     }
                 }
             }
@@ -206,7 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const drawGanttAxis = () => {
         ganttLabelsEl.innerHTML = '';
         for (let i = 0; i <= totalExecutionTime; i++) {
-            if (i % (Math.ceil(totalExecutionTime/20)) === 0 || i === totalExecutionTime) {
+            if (i % (Math.ceil(totalExecutionTime / 20)) === 0 || i === totalExecutionTime) {
                 const label = document.createElement('span');
                 label.className = 'gantt-label';
                 label.textContent = i;
@@ -232,7 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 barEl.className = 'gantt-bar';
                 if (bar.id !== 'Idle') barEl.textContent = bar.id;
                 barEl.style.width = `${(barWidth / totalExecutionTime) * 100}%`;
-                barEl.style.backgroundColor = bar.id === 'Idle' ? '#BDC1C6' : processColors[bar.id];
+                barEl.style.backgroundColor = bar.id === 'Idle' ? '#333' : processColors[bar.id];
                 ganttChartEl.appendChild(barEl);
             }
         });
@@ -257,7 +269,9 @@ document.addEventListener('DOMContentLoaded', () => {
              readyQueueEl.appendChild(queueEl);
         });
 
-        currentTime++;
+        if (isRunning) {
+            currentTime++;
+        }
     };
     
     const renderFinalState = () => {
@@ -272,7 +286,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const populateResultsTable = (initial = false) => {
         resultsBody.innerHTML = '';
         const source = initial ? initialProcesses : finalProcessStates;
-        source.sort((a,b) => a.id.localeCompare(b.id, undefined, {numeric: true}));
+        source.sort((a, b) => a.id.localeCompare(b.id, undefined, { numeric: true }));
         source.forEach(p => {
             const row = document.createElement('tr');
             let priorityCell = algorithm.includes('PRIO') ? `<td>${p.priority}</td>` : '';
@@ -298,7 +312,7 @@ document.addEventListener('DOMContentLoaded', () => {
         endBtn.disabled = true;
         logMessageEl.textContent = 'Simulation finished!';
         
-        if(avgTatEl.textContent === '0.00') {
+        if (avgTatEl.textContent === '0.00') {
             const totalTAT = finalProcessStates.reduce((acc, p) => acc + p.turnaround_time, 0);
             const totalWT = finalProcessStates.reduce((acc, p) => acc + p.waiting_time, 0);
             avgTatEl.textContent = (totalTAT / finalProcessStates.length).toFixed(2);
